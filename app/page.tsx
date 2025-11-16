@@ -72,7 +72,7 @@ export default function Home() {
     <div className="site">
       {/* TOP BAR */}
       <div className="top-bar">
-        Envio rápido para Lousada e arredores · Aconselhamento farmacêutico
+         · Aconselhamento farmacêutico
         personalizado
       </div>
 
