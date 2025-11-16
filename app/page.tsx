@@ -1,6 +1,18 @@
-import Image from "next/image";
+"use client";
 
-const products = [
+import Image from "next/image";
+import { useMemo, useState } from "react";
+
+type Product = {
+  name: string;
+  category: string;
+  promoTag: string;
+  price: string;
+  oldPrice: string;
+  skin: string;
+};
+
+const products: Product[] = [
   {
     name: "Rotina Completa Pele Oleosa",
     category: "Dermocosmética",
@@ -67,7 +79,41 @@ const products = [
   },
 ];
 
+const categories = [
+  { id: "all", label: "Todos" },
+  { id: "Skin Care", label: "Skin care" },
+  { id: "Dermocosmética", label: "Dermocosmética" },
+  { id: "Maquilhagem", label: "Maquilhagem" },
+  { id: "Bebé & Mamã", label: "Bebé & Mamã" },
+  { id: "Solar", label: "Proteção solar" },
+  { id: "Promo", label: "Em promoção" },
+];
+
 export default function Home() {
+  const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [search, setSearch] = useState<string>("");
+
+  const filteredProducts = useMemo(() => {
+    return products.filter((p) => {
+      // filtrar por categoria
+      if (activeCategory === "Promo") {
+        if (!p.promoTag) return false;
+      } else if (activeCategory !== "all" && p.category !== activeCategory) {
+        return false;
+      }
+
+      // filtrar por pesquisa
+      if (!search.trim()) return true;
+
+      const q = search.toLowerCase();
+      return (
+        p.name.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q) ||
+        p.skin.toLowerCase().includes(q)
+      );
+    });
+  }, [activeCategory, search]);
+
   return (
     <div className="site">
       {/* TOP BAR */}
@@ -80,15 +126,14 @@ export default function Home() {
       <header>
         <div className="header-main">
           <div className="logo">
-          <Image
-  src="/logo-farma-clinic.jpg"
-  alt="Farma Clinic"
-  width={220}
-  height={80}
-  className="logo-img"
-  priority
-/>
-
+            <Image
+              src="/logo-farma-clinic.png"
+              alt="Farma Clinic"
+              width={220}
+              height={80}
+              className="logo-img"
+              priority
+            />
             <small>Lousada</small>
           </div>
 
@@ -97,6 +142,8 @@ export default function Home() {
             <input
               type="text"
               placeholder="Pesquisa por produto, marca ou necessidade…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
           </div>
 
@@ -114,13 +161,18 @@ export default function Home() {
 
         <nav className="nav-cats">
           <div className="nav-cats-inner">
-            <button className="cat-pill active">Todos</button>
-            <button className="cat-pill">Skin care</button>
-            <button className="cat-pill">Dermocosmética</button>
-            <button className="cat-pill">Maquilhagem</button>
-            <button className="cat-pill">Bebé & Mamã</button>
-            <button className="cat-pill">Proteção solar</button>
-            <button className="cat-pill">Em promoção</button>
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                className={
+                  "cat-pill" +
+                  (activeCategory === cat.id ? " active" : "")
+                }
+                onClick={() => setActiveCategory(cat.id)}
+              >
+                {cat.label}
+              </button>
+            ))}
           </div>
         </nav>
       </header>
@@ -191,10 +243,13 @@ export default function Home() {
                 Clinic.
               </p>
             </div>
+            <p style={{ fontSize: "0.85rem", color: "#6b7280" }}>
+              A mostrar {filteredProducts.length} produto(s)
+            </p>
           </div>
 
           <div className="products-grid">
-            {products.map((p) => (
+            {filteredProducts.map((p) => (
               <article key={p.name} className="product-card">
                 <div className="product-img">Imagem do produto</div>
                 <div className="product-badges">
