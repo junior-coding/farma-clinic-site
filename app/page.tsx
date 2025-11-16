@@ -127,7 +127,7 @@ export default function Home() {
         <div className="header-main">
           <div className="logo">
             <Image
-              src="/logo-farma-clinic.png"
+              src="/logo-farma-clinic.jpg"
               alt="Farma Clinic"
               width={220}
               height={80}
