@@ -1,20 +1,16 @@
-import type { Metadata } from "next";
 import "./globals.css";
+import { CartProvider } from "./context/cart-context";
+import CartSidebar from "@/components/cart-sidebar";
 
-export const metadata: Metadata = {
-  title: "Farma Clinic Lousada",
-  description: "Dermocosmética, skin care e maquilhagem em Lousada.",
-};
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt">
       <body>
-        {children}
+        <CartProvider>
+          <CartSidebar />
+          {children}
+        </CartProvider>
       </body>
     </html>
   );

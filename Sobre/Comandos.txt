@@ -1,0 +1,7 @@
+Sempre que atualizar o site no github (visualstudio)
+
+git add .
+git commit -m "Alterei X e Y"
+git push
+
+
