@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useCart } from "@/app/context/cart-context";
 
 type HeaderProps = {
   search: string;
@@ -8,6 +9,8 @@ type HeaderProps = {
 };
 
 export default function Header({ search, setSearch }: HeaderProps) {
+  const { totalItems, openCart } = useCart();
+
   return (
     <>
       <div className="top-bar">
@@ -17,6 +20,7 @@ export default function Header({ search, setSearch }: HeaderProps) {
 
       <header>
         <div className="header-main">
+          {/* LOGO */}
           <div className="logo">
             <Image
               src="/logo-farma-clinic.png"
@@ -29,6 +33,7 @@ export default function Header({ search, setSearch }: HeaderProps) {
             <small>Lousada</small>
           </div>
 
+          {/* PESQUISA */}
           <div className="search-box">
             <span>🔍</span>
             <input
@@ -39,15 +44,23 @@ export default function Header({ search, setSearch }: HeaderProps) {
             />
           </div>
 
+          {/* AÇÕES */}
           <div className="header-actions">
-            <div className="header-action">
-              <span className="icon">👤</span>
+            {/* ENTRAR / REGISTAR */}
+            <button className="header-action header-action--ghost">
               <span>Entrar / Registar</span>
-            </div>
-            <div className="header-action">
-              <span className="icon">🛒</span>
+            </button>
+
+            {/* CARRINHO */}
+            <button
+              className="header-action header-action--cart"
+              onClick={openCart}
+            >
               <span>Carrinho</span>
-            </div>
+              {totalItems > 0 && (
+                <span className="cart-badge">{totalItems}</span>
+              )}
+            </button>
           </div>
         </div>
       </header>
