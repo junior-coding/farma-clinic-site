@@ -9,10 +9,11 @@ export default function ProductsGrid({ products }: ProductsGridProps) {
     <div className="products-grid">
       {products.map((p) => (
         <a
-          key={p.slug}
-          href={`/produto?slug=${p.slug}`}
-          className="product-card"
-        >
+  key={p.slug}
+  href={`/produto/${p.slug}`}
+  className="product-card"
+>
+
           <div className="product-img">Imagem do produto</div>
           <div className="product-badges">
             <span className="product-pill">{p.category}</span>
